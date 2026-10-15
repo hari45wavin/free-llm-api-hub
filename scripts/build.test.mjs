@@ -1904,6 +1904,13 @@ test('/coverage/ says how to propose one value, is in the sitemap with an absolu
   assert.match(readFileSync(join(ROOT, 'site/p/groq.html'), 'utf8'), /<a href="\.\.\/coverage\/">Data coverage<\/a>/, 'the shared footer of a generated page');
 });
 
+test('a11y: the filter chips stay reachable by keyboard and screen reader, with a visible focus', () => {
+  const css = readFileSync(join(ROOT, 'site/styles.css'), 'utf8');
+  assert.doesNotMatch(css, /\.chip input\s*\{[^}]*display\s*:\s*none/, 'a display:none checkbox leaves the chip out of the tab order and the accessibility tree');
+  assert.match(css, /\.chip:has\(input:focus-visible\)/, 'the focused chip shows an outline');
+  assert.match(css, /--control-border:\s*#[0-9a-f]{6}/i, 'a control border token exists for the 3:1 non-text contrast');
+});
+
 // ---- Hacktoberfest banner on the home (F8) --------------------------------
 // The banner is hand-written in site/index.html and removed by site/site.js
 // once its data-until day (UTC, inclusive) has passed. The build stays
